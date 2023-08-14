@@ -1,12 +1,24 @@
-import { HttpStatus, INestApplication, ValidationPipe } from "@nestjs/common";
+import helmet from "helmet";
+
+import { INestApplication, VersioningType } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { AppModule } from "./app.module.js";
+import { AppModule } from "./app.module";
+import { addRequestDataValidationTo } from "./utils";
+
+const APP_ROUTE_PREFIX = "api";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  addInputDataValidationTo(app);
+  app.setGlobalPrefix(APP_ROUTE_PREFIX);
+
+  app.use(helmet());
+
+  addRequestDataValidationTo(app);
+
+  addVersioningTo(app);
 
   addSwaggerTo(app);
 
@@ -23,13 +35,12 @@ function addSwaggerTo(app: INestApplication) {
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup("api", app, document);
+  SwaggerModule.setup(`${APP_ROUTE_PREFIX}/:version/docs`, app, document);
 }
 
-function addInputDataValidationTo(app: INestApplication) {
-  app.useGlobalPipes(new ValidationPipe( {
-    errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY, // 422
-    transform: true, // Para convertir el tipo de fuel a uppercase
-    enableDebugMessages: true, // Para ver los mensajes de error
-  } ));
+function addVersioningTo(app: INestApplication) {
+  app.enableVersioning( {
+    type: VersioningType.URI,
+    defaultVersion: "1",
+  } );
 }

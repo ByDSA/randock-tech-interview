@@ -1,0 +1,21 @@
+version: "3.9"
+name: randock
+services:
+  backend:
+    image: backend
+    build:
+      context: ..
+      dockerfile: bin/Dockerfile
+      args:
+        PNPM_VERSION: 8.6.12
+        NODE_IMAGE_VERSION: 18.17.0-alpine
+      target: deploy
+    ports:
+      - 8080:3000
+    networks:
+      - backend
+    working_dir: /app
+    restart: always
+
+networks:
+  backend:

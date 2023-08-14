@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(HttpExceptionFilter.name);
+  readonly #logger = new Logger(HttpExceptionFilter.name);
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -19,7 +19,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       endpoint: request.url,
     };
 
-    this.logger.warn(`${statusCode} ${message}`);
+    this.#logger.warn(`${statusCode} ${message}`);
 
     response
       .status(statusCode)

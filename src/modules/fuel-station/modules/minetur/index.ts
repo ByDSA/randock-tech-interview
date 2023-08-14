@@ -1,7 +1,7 @@
 export {
   default as MineturModule,
-} from "./module";
+} from "./Module";
 
 export {
   default as MineturService,
-} from "./service";
+} from "./Service";

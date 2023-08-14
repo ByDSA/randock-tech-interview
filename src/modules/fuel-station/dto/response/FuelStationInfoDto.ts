@@ -4,28 +4,28 @@ import { IsNumber, IsString, IsUrl } from "class-validator";
 export default class FuelStationInfoDto {
   @ApiProperty( {
     description: "Nombre de la estación de servicio",
-    example: "Repsol",
+    example: "GALP",
   } )
   @IsString()
-    name: string;
+    name!: string;
 
   @ApiProperty( {
     description: "Precio del combustible",
-    example: 1.2,
+    example: 1.764,
   } )
   @IsNumber()
-    price: number;
+    price!: number;
 
   @ApiProperty( {
     description: "Dirección de la estación de servicio",
-    example: "Calle de la Estación, 1, 46100 Burjassot, Valencia",
+    example: "Burjassot CALLE DE VALENCIA, 4",
   } )
-    address: string;
+    address!: string;
 
   @ApiProperty( {
     description: "URL de Google Maps de la estación de servicio",
-    example: "https://goo.gl/maps/1q2w3e4r5t6y7u8i9o",
+    example: "https://www.google.com/maps/search/?api=1&query=GALP%20Burjassot%20CALLE%20DE%20VALENCIA,%204",
   } )
   @IsUrl()
-    url: string;
+    url!: string;
 }
